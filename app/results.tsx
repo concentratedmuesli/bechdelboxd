@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Parser from 'rss-parser';
+import { useParams } from 'react-router';
 import allMovies from './allMovies.json';
 
 type CustomItem = {filmTitle: string, filmYear: string, watchedDate: Date};
