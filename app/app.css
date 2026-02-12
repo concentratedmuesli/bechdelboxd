@@ -1,15 +1,51 @@
+@font-face {
+  font-display: swap; 
+  font-family: 'Fraunces';
+  font-style: bold;
+  font-weight: 700;
+  src: url('./fonts/Fraunces9pt-Bold.woff2'); 
+}
+
+@font-face {
+  font-display: swap; 
+  font-family: 'Pretendard';
+  font-style: regular;
+  font-weight: 400;
+  src: url('./fonts/Pretendard-Regular.woff2'); 
+}
+
+@font-face {
+  font-display: swap; 
+  font-family: 'Pretendard';
+  font-style: bold;
+  font-weight: 700;
+  src: url('./fonts/Pretendard-Bold.woff2'); 
+}
+
+@font-face {
+  font-display: swap; 
+  font-family: 'Pretendard';
+  font-style: light;
+  font-weight: 300;
+  src: url('./fonts/Pretendard-Light.woff2'); 
+}
+
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-fraunces: 'Fraunces', 'Serif';
+  --font-pretendard: 'Pretendard', 'Sans Serif';
+  --color-bright-green: #00ac1c;
+  --color-dark-green: #009318;
 }
 
-html,
-body {
-  @apply bg-white dark:bg-gray-950;
+@layer base {
 
-  @media (prefers-color-scheme: dark) {
-    color-scheme: dark;
+  html,
+  body {
+    background-color: #14181c;
+    color: #9ab;
+    font-family: var(--font-pretendard);
+    font-size: 1.1rem;
   }
 }
