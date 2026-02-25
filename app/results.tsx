@@ -3,6 +3,7 @@ import { useParams } from 'react-router';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 
+
 export default function ShowResults() {
   const [items, setItems] = useState<any[]>([]);
   const [mergedItems, setMergedItems] = useState<any[]>([]);
@@ -11,6 +12,7 @@ export default function ShowResults() {
   const [score2, setScore2] = useState<any[]>([]);
   const [score3, setScore3] = useState<any[]>([]);
   const [noBechdelData, setNoBechdelData] = useState<any[]>([]);
+  const [totalFailing, setTotalFailing] = useState<number>();
   const [chartData, setChartData] = useState<any>({});
 
   const [loading, setLoading] = useState(true);
@@ -112,37 +114,46 @@ export default function ShowResults() {
       let score3 = mergedItems.filter(item => item.bechdelRating === 3);
       let noBechdelData = mergedItems.filter(item => !item.bechdelRating);
 
+      let totalFailing = Math.round((score3.length) * 100 / (score0.length + score1.length + score2.length + score3.length));
+
       setScore0(score0);
       setScore1(score1);
       setScore2(score2);
       setScore3(score3);
       setNoBechdelData(noBechdelData);
 
+      setTotalFailing(totalFailing);
+
       ChartJS.register(ArcElement, Tooltip, Legend);
 
       const data = {
-        labels: ['Pass', "Don't pass"],
+        labels: ['Pass', "Fail"],
         datasets: [
           {
-            
-            data: [score3.length, [score0.length, score1.length, score2.length].reduce((a, b) => a + b)],
+            data:
+              [score3.length, [score0.length, score1.length, score2.length].reduce((a, b) => a + b)],
             backgroundColor: [
-              'rgba(255, 99, 132, 0.2)',
-              'rgba(54, 162, 235, 0.2)',
-              'rgba(255, 206, 86, 0.2)',
-              'rgba(75, 192, 192, 0.2)',
+              'rgba(0, 172, 28, 0.2)',
+              'rgba(64, 188, 244, 0.2)',
+
             ],
             borderColor: [
-              'rgba(255, 99, 132, 1)',
-              'rgba(54, 162, 235, 1)',
-              'rgba(255, 206, 86, 1)',
-              'rgba(75, 192, 192, 1)',
+              'rgba(0, 172, 28, 1)',
+              'rgba(64, 188, 244, 1)'
             ],
-            borderWidth: 1,
+            borderWidth: 5,
+            offset: 10,
+            hoverOffset: 0,
+            borderAlign: 'inner',
+            cutout: '20%',
+            radius: '85%',
+            hoverBorderWidth: 5
           },
         ],
       };
+
       setChartData(data);
+
       console.log(data.datasets[0].data);
     }
     createGraph();
@@ -152,19 +163,60 @@ export default function ShowResults() {
   if (loading) return <div>Loading...</div>;
 
   return (
-    <div>
-      <Doughnut data={chartData} className='max-w-50 max-h-100'/>
-      {/* {mergedItems.map((item, index) => (
-        <div key={index} style={{ marginBottom: '20px', padding: '10px', border: '1px solid #ccc' }}>
-          <h3>
-            {item.title}
-          </h3>
-          <p>{item.year}</p>
-          <p>Does the movie pass?: {item.bechdelRating}</p>
-          <p>Your rating: {item.rating}</p>
-          <p>imdbid: {item.imdbId}</p>
+    <main className="flex items-center justify-center pt-16 pb-4">
+      <div className="flex-1 flex flex-col items-center gap-12 min-h-0">
+        <header>
+          <nav>
+            <h1 className="text-4xl font-pretendard font-bold text-white p-4">Bechdelboxd</h1>
+          </nav>
+        </header>
+        <div className="flex flex-col gap-4 mx-auto min-w-[50%]">
+          <h2 className="font-fraunces text-white text-2xl">Results for {letterboxdHandle}</h2>
+          <Doughnut data={chartData} className='max-w-60 max-h-60' />
+          <p>Only {totalFailing}% of your movies pass the test.</p>
+          <h3 className="font-fraunces text-white text-2xl">Your movies that fail</h3>
+          <div className='border-b border-light-grey'>
+          <h4 className='uppercase text-sm'>Movies that do not have two named women</h4>
+          </div>
+          <div className="flex flex-row gap-2">
+          {score0.map((item, index) => (
+            <div key={index}>
+              <div className="flex flex-col group relative items-center">
+                <a href={`${item.link}`} rel="noopener noreferrer">
+                <img
+                className='max-w-30 rounded-sm border border-poster-frame hover:outline-2 hover:border-bright-green hover:outline-bright-green'
+                  src={`${item.imageUrl}`}
+                  alt={`Movie poster of ${item.title}`}
+                  />
+                  </a>
+                  <span className="absolute -top-10 scale-0 transition-all rounded bg-dark-grey p-2 text-xs font-bold group-hover:scale-100 text-nowrap text-tooltip-text">{`${item.title} (${item.year}) `}</span>
+                  <span className='absolute -top-4 scale-0 transition-all bg-dark-grey w-3 h-3 rotate-45 group-hover:scale-100'></span>
+              </div>
+            </div>
+          ))}
+          </div>
+          <div className='border-b border-light-grey'>
+          <h4 className='uppercase text-sm'>Movies that have two named women but who don't talk to each other</h4>
+          </div>
+          <div className="flex flex-row gap-2">
+          {score1.map((item, index) => (
+            <div key={index}>
+              <div className="flex flex-col group relative items-center">
+                <a href={`${item.link}`} rel="noopener noreferrer">
+                <img
+                className='max-w-30 rounded-sm border border-poster-frame hover:outline-2 hover:border-bright-green hover:outline-bright-green'
+                  src={`${item.imageUrl}`}
+                  alt={`Movie poster of ${item.title}`}
+                  />
+                  </a>
+                  <span className="absolute -top-10 scale-0 transition-all rounded bg-dark-grey p-2 text-xs font-bold group-hover:scale-100 text-nowrap text-tooltip-text">{`${item.title} (${item.year}) `}</span>
+                  <span className='absolute -top-4 scale-0 transition-all bg-dark-grey w-3 h-3 rotate-45 group-hover:scale-100'></span>
+              </div>
+            </div>
+          ))}
+          </div>
         </div>
-      ))} */}
-    </div>
+      </div>
+    </main>
   );
 }

@@ -37,6 +37,12 @@
   --font-pretendard: 'Pretendard', 'Sans Serif';
   --color-bright-green: #00ac1c;
   --color-dark-green: #009318;
+  --color-bright-orange: #FF9933;
+  --color-bright-blue: #40BCF4;
+  --color-light-grey: #9ab;
+  --color-dark-grey: #456;
+  --color-poster-frame: #ddeeff40;
+  --color-tooltip-text: #ddeeff;
 }
 
 @layer base {
