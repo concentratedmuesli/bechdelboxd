@@ -5,16 +5,15 @@ import { useNavigate } from "react-router-dom";
 
 
 export function EnterUsername() {
-  const [letterboxdHandle, setLetterboxdHandle] = useState("");
+  const [letterboxdHandle, setLetterboxdHandle] = useState<string>("");
   let navigate = useNavigate();
   
   function submitUsername(event:any) {
     event?.preventDefault()
     
     
-    if (letterboxdHandle.trim()) {
+    if (letterboxdHandle && letterboxdHandle.trim()) {
       navigate(`/results/${encodeURIComponent(letterboxdHandle)}`);
-      console.log(letterboxdHandle);
     }
   }
 
