@@ -1,26 +1,54 @@
-import type { mergedItem } from "../mergedItems";
+import type { sortedItem } from "./+types/sortedItems";
 
 interface ListsComponentProps {
-  score0: mergedItem[];
-  score1: mergedItem[];
-  score2: mergedItem[];
-  score3: mergedItem[];
-  noBechdelData: mergedItem[];
-  totalFailing: number | undefined;
+  sortedItems: sortedItem[];
 }
 
-export function Lists ({score0, score1, score2, score3, noBechdelData, totalFailing}: ListsComponentProps) {
+export function Lists({ sortedItems }: ListsComponentProps) {
+
+  console.log(sortedItems[0].data.length, sortedItems[1].data.length, sortedItems[2].data.length, sortedItems[3].data.length, sortedItems[4].data.length);
 
   return (
-    <div>
-      <h3 className="font-fraunces text-white text-2xl">Your movies that fail</h3>
-      <div className='border-b border-light-grey'>
-        <h4 className='uppercase text-sm'>Movies that do not have two named women</h4>
+    <div className="flex flex-col gap-12">
+
+      {/* Fail --------------------------------------------------------------------------------------------------------------------------- */}
+      <div>
+        <h3 className="font-fraunces text-white text-2xl mb-4">
+          Your movies that fail</h3>
+
+        <div className="flex flex-col gap-8">
+          {sortedItems.slice(0, 3).map(group => (
+            <div key={group.score}>
+              <div className='border-b border-light-grey mb-2'>
+                <h4 className='uppercase text-sm'>{group.title}</h4>
+              </div>
+              <div className="flex flex-row flex-wrap gap-2">
+                {group.data.map((item, index) => (
+                  <div key={index} className="flex flex-col group relative items-center">
+                    <a href={`${item.link}`} rel="noopener noreferrer">
+                      <img
+                        className='max-w-30 rounded-sm border border-poster-frame hover:outline-2 hover:border-bright-green hover:outline-bright-green'
+                        src={`${item.imageUrl}`}
+                        alt={`Movie poster of ${item.title}`}
+                      />
+                    </a>
+                    <span className="absolute -top-10 scale-0 transition-all rounded bg-dark-grey p-2 text-xs font-bold group-hover:scale-100 text-nowrap text-tooltip-text">{`${item.title} (${item.year}) `}</span>
+                    <span className='absolute -top-4 scale-0 transition-all bg-dark-grey w-3 h-3 rotate-45 group-hover:scale-100'></span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
-      <div className="flex flex-row gap-2">
-        {score0.map((item, index) => (
-          <div key={index}>
-            <div className="flex flex-col group relative items-center">
+
+      {/* Pass ------------------------------------------------------------------------------------------------------------------------------ */}
+      <div>
+        <h3 className="font-fraunces text-white text-2xl mb-4">
+          Your movies that pass</h3>
+        <div className="flex flex-row flex-wrap gap-2">
+          {sortedItems[3].data.map((item, index) => (
+            <div key={index} className="flex flex-col group relative items-center">
               <a href={`${item.link}`} rel="noopener noreferrer">
                 <img
                   className='max-w-30 rounded-sm border border-poster-frame hover:outline-2 hover:border-bright-green hover:outline-bright-green'
@@ -31,31 +59,35 @@ export function Lists ({score0, score1, score2, score3, noBechdelData, totalFail
               <span className="absolute -top-10 scale-0 transition-all rounded bg-dark-grey p-2 text-xs font-bold group-hover:scale-100 text-nowrap text-tooltip-text">{`${item.title} (${item.year}) `}</span>
               <span className='absolute -top-4 scale-0 transition-all bg-dark-grey w-3 h-3 rotate-45 group-hover:scale-100'></span>
             </div>
-
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-      <div className='border-b border-light-grey'>
-          <h4 className='uppercase text-sm'>Movies that have two named women but who don't talk to each other</h4>
-          </div>
-          <div className="flex flex-row gap-2">
-          {score1.map((item, index) => (
-            <div key={index}>
-              <div className="flex flex-col group relative items-center">
-                <a href={`${item.link}`} rel="noopener noreferrer">
+
+      {/* No rating --------------------------------------------------------------------------------------------------------------------------- */}
+      <div>
+        <h3 className="font-fraunces text-white text-2xl mb-4">
+          Your movies that do not have a Bechdel rating yet</h3>
+        <div className="flex flex-row flex-wrap gap-2">
+          {sortedItems[4].data.map((item, index) => (
+            <div key={index} className="flex flex-col group relative items-center">
+              <a href={`${item.link}`} rel="noopener noreferrer">
                 <img
-                className='max-w-30 rounded-sm border border-poster-frame hover:outline-2 hover:border-bright-green hover:outline-bright-green'
+                  className='max-w-30 rounded-sm border border-poster-frame hover:outline-2 hover:border-bright-green hover:outline-bright-green'
                   src={`${item.imageUrl}`}
                   alt={`Movie poster of ${item.title}`}
-                  />
-                  </a>
-                  <span className="absolute -top-10 scale-0 transition-all rounded bg-dark-grey p-2 text-xs font-bold group-hover:scale-100 text-nowrap text-tooltip-text">{`${item.title} (${item.year}) `}</span>
-                  <span className='absolute -top-4 scale-0 transition-all bg-dark-grey w-3 h-3 rotate-45 group-hover:scale-100'></span>
-              </div>
+                />
+              </a>
+              <span className="absolute -top-10 scale-0 transition-all rounded bg-dark-grey p-2 text-xs font-bold group-hover:scale-100 text-nowrap text-tooltip-text">{`${item.title} (${item.year}) `}</span>
+              <span className='absolute -top-4 scale-0 transition-all bg-dark-grey w-3 h-3 rotate-45 group-hover:scale-100'></span>
             </div>
           ))}
-          </div>
+        </div>
+        <p className="py-2">You know whether these movies pass the Bechdel test? Feel free to add them yourself to the 
+          <a href="https://bechdeltest.com/add/" rel="noopener noreferrer" className="text-bright-green underline underline-offset-3 hover:text-white active:text-bright-blue"> Bechdel Test Movie List</a>.</p>
+      </div>
+
     </div>
+
 
   );
 };

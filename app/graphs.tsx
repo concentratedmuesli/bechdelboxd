@@ -1,25 +1,16 @@
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import { useState, useEffect } from "react";
-import type { mergedItem } from "../mergedItems";
+import type { sortedItem } from "./+types/sortedItems";
 
 interface GraphsComponentProps {
-  mergedItems: mergedItem[];
-  score0: mergedItem[] ;
-  score1: mergedItem[];
-  score2: mergedItem[];
-  score3: mergedItem[];
-  noBechdelData: mergedItem[];
-  totalFailing: number | undefined;
-
+  sortedItems: sortedItem[];
+  totalFailing: number;
 }
 
-export function Graphs({ mergedItems, score0, score1, score2, score3, noBechdelData, totalFailing }: GraphsComponentProps) {
+export function Graphs({ sortedItems, totalFailing }: GraphsComponentProps) {
   
   const [chartData, setChartData] = useState<any>(null);
-
-  console.log(score0);
-
 
   useEffect(() => {
 
@@ -30,7 +21,7 @@ export function Graphs({ mergedItems, score0, score1, score2, score3, noBechdelD
         datasets: [
           {
             data:
-              [score3.length, [score0.length, score1.length, score2.length].reduce((a, b) => a + b)],
+              [sortedItems[3].data.length, [sortedItems[0].data.length, sortedItems[1].data.length, sortedItems[2].data.length].reduce((a, b) => a + b)],
             backgroundColor: [
               'rgba(0, 172, 28, 0.2)',
               'rgba(64, 188, 244, 0.2)',
@@ -52,9 +43,8 @@ export function Graphs({ mergedItems, score0, score1, score2, score3, noBechdelD
       };
       
       setChartData(data);
-      console.log(data.datasets[0].data);
       
-  }, [mergedItems, score0, score1, score2, score3, noBechdelData, totalFailing]);
+  }, [sortedItems, totalFailing]);
 
   if (!chartData) {
     return <div>Loading...</div>

@@ -2,18 +2,14 @@ import { useState, useEffect } from 'react';
 import { Graphs } from './graphs';
 import { Lists } from './lists';
 import { getResultData } from './utils/resultFetcher';
-import type { mergedItem } from '../mergedItems';
+import type { sortedItem } from './+types/sortedItems';
 import { useParams } from 'react-router';
 
 export default function ShowResults() {
   const { letterboxdHandle } = useParams<{ letterboxdHandle: string; }>();
 
-  const [mergedItems, setMergedItems] = useState<mergedItem[]>([]);
-  const [score0, setScore0] = useState<mergedItem[]>([]);
-  const [score1, setScore1] = useState<mergedItem[]>([]);
-  const [score2, setScore2] = useState<mergedItem[]>([]);
-  const [score3, setScore3] = useState<mergedItem[]>([]);
-  const [noBechdelData, setNoBechdelData] = useState<any[]>([]);
+  const [sortedItems, setSortedItems] = useState<sortedItem[]>([]);
+
   const [totalFailing, setTotalFailing] = useState<number>();
 
 
@@ -25,8 +21,13 @@ export default function ShowResults() {
     const fetchData = async () => {
       try {
         if (letterboxdHandle) {
-          const mergedItems: mergedItem[] = await getResultData(letterboxdHandle);
-          setMergedItems(mergedItems);
+          const { sortedItems, totalFailing } = await getResultData(letterboxdHandle);
+          if (sortedItems) {
+            setSortedItems(sortedItems);
+          }
+          if (totalFailing) {
+            setTotalFailing(totalFailing);
+          }
         }
       } catch (error) {
         console.error("Error getting results:", error);
@@ -38,30 +39,6 @@ export default function ShowResults() {
 
     fetchData();
   }, []);
-
-  useEffect(() => {
-    function divideByScore() {
-
-      let score0 = mergedItems.filter(item => item.bechdelRating === 0);
-      let score1 = mergedItems.filter(item => item.bechdelRating === 1);
-      let score2 = mergedItems.filter(item => item.bechdelRating === 2);
-      let score3 = mergedItems.filter(item => item.bechdelRating === 3);
-      let noBechdelData = mergedItems.filter(item => !item.bechdelRating);
-
-      let totalFailing: number | undefined = Math.round((score3.length) * 100 / (score0.length + score1.length + score2.length + score3.length));
-
-      setScore0(score0);
-      setScore1(score1);
-      setScore2(score2);
-      setScore3(score3);
-      setNoBechdelData(noBechdelData);
-
-      setTotalFailing(totalFailing);
-   
-    }
-    divideByScore();
-
-  }, [letterboxdHandle, mergedItems]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
@@ -76,27 +53,17 @@ export default function ShowResults() {
           </nav>
         </header>
 
-        <div className="flex flex-col gap-4 mx-auto min-w-[50%]">
-          <h2 className="font-fraunces text-white text-2xl">Results for {letterboxdHandle}</h2>
+        <div className="flex flex-col gap-4 mx-auto max-w-[50%]">
+          <h2 className="font-fraunces text-white text-2xl">Results for <span className='underline underline-offset-2'>{letterboxdHandle}</span></h2>
           <Graphs
-            mergedItems={mergedItems}
-            score0={score0}
-            score1={score1}
-            score2={score2}
-            score3={score3}
-            noBechdelData={noBechdelData}
-            totalFailing={totalFailing}
+            sortedItems={sortedItems}
+            totalFailing={totalFailing!}
           ></Graphs>
           <Lists
-            score0={score0}
-            score1={score1}
-            score2={score2}
-            score3={score3}
-            noBechdelData={noBechdelData}
-            totalFailing={totalFailing}
+            sortedItems={sortedItems}
           ></Lists>
         </div>
-        
+
       </div>
     </main>
   );
