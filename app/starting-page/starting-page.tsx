@@ -7,11 +7,11 @@ import { useNavigate } from "react-router-dom";
 export function EnterUsername() {
   const [letterboxdHandle, setLetterboxdHandle] = useState<string>("");
   let navigate = useNavigate();
-  
-  function submitUsername(event:any) {
-    event?.preventDefault()
-    
-    
+
+  function submitUsername(event: any) {
+    event?.preventDefault();
+
+
     if (letterboxdHandle && letterboxdHandle.trim()) {
       navigate(`/results/${encodeURIComponent(letterboxdHandle)}`);
     }
@@ -33,9 +33,11 @@ export function EnterUsername() {
           </div>
           <div className="">
             <h2 className="font-fraunces text-white text-2xl">Rules:</h2>
-            <p>have at least two named women in it</p>
-            <p>who talk to each other</p>
-            <p>about something other than a man</p>
+            <ul>
+              <li>have at least two named women in it</li>
+              <li>who talk to each other</li>
+              <li>about something other than a man</li>
+            </ul>
           </div>
           <form className="flex flex-col items-start gap-2">
             <label className="font-fraunces text-white text-2xl">Enter your letterboxd username</label>

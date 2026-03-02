@@ -44,12 +44,23 @@ export default function ShowResults() {
   if (error) return <div>Error: {error.message}</div>;
 
   return (
-    <main className="flex items-center justify-center pt-16 pb-4">
+    <main className="flex items-center justify-center pt-8 pb-4 max-w-[50%] mx-auto">
       <div className="flex-1 flex flex-col items-center gap-12 min-h-0">
 
         <header>
-          <nav>
-            <h1 className="text-4xl font-pretendard font-bold text-white p-4">Bechdelboxd</h1>
+          <nav className='flex flex-row justify-between items-start gap-4'>
+            <div className='flex flex-col flex-1'>
+              <h1 className="text-4xl font-pretendard font-bold text-white">Bechdelboxd</h1>
+              <p className="">Of your 50 last watched movies, how many pass the bechdel test?</p>
+            </div>
+            <div className='flex flex-col flex-1'>
+              <h2 className="font-fraunces text-white text-xl ">Rules:</h2>
+              <ul>
+                <li>have at least two named women in it</li>
+                <li>who talk to each other</li>
+                <li>about something other than a man</li>
+              </ul>
+            </div>
           </nav>
         </header>
 
