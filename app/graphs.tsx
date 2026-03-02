@@ -5,10 +5,10 @@ import type { sortedItem } from "./+types/sortedItems";
 
 interface GraphsComponentProps {
   sortedItems: sortedItem[];
-  totalFailing: number;
+  passingPercentage: number;
 }
 
-export function Graphs({ sortedItems, totalFailing }: GraphsComponentProps) {
+export function Graphs({ sortedItems, passingPercentage }: GraphsComponentProps) {
   
   const [chartData, setChartData] = useState<any>(null);
 
@@ -44,7 +44,7 @@ export function Graphs({ sortedItems, totalFailing }: GraphsComponentProps) {
       
       setChartData(data);
       
-  }, [sortedItems, totalFailing]);
+  }, [sortedItems, passingPercentage]);
 
   if (!chartData) {
     return <div>Loading...</div>
@@ -53,7 +53,7 @@ export function Graphs({ sortedItems, totalFailing }: GraphsComponentProps) {
   return (
     <div>
       <Doughnut data={chartData} className='max-w-60 max-h-60' />
-      <p>Only {totalFailing}% of your movies pass the test.</p>
+      <p>Only {passingPercentage}% of your movies pass the test.</p>
     </div>
   );
 

@@ -2,7 +2,7 @@ import type { sortedItem } from "../+types/sortedItems";
 import type { mergedItem } from "../+types/sortedItems";
 import { useEffect } from "react";
 
-export const getResultData = async (letterboxdHandle: string): Promise<{ sortedItems: any[], totalFailing: number; }> => {
+export const getResultData = async (letterboxdHandle: string): Promise<{ sortedItems: any[], passingPercentage: number; }> => {
   try {
     const CORS_PROXY = 'https://corsproxy.io/?';
     const RSS_URL = `https://letterboxd.com/${letterboxdHandle}/rss/`;
@@ -98,9 +98,9 @@ export const getResultData = async (letterboxdHandle: string): Promise<{ sortedI
       },
     ];
 
-    let totalFailing: number = Math.round((sortedItems[3].data.length) * 100 / (sortedItems[0].data.length + sortedItems[1].data.length + sortedItems[2].data.length + sortedItems[3].data.length));
+    let passingPercentage: number = Math.round((sortedItems[3].data.length) * 100 / (sortedItems[0].data.length + sortedItems[1].data.length + sortedItems[2].data.length + sortedItems[3].data.length));
 
-    return { sortedItems, totalFailing };
+    return { sortedItems, passingPercentage };
 
   } catch (error) {
     console.error("Error parsing RSS feed:", error);

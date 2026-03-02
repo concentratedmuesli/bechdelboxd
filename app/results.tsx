@@ -10,7 +10,7 @@ export default function ShowResults() {
 
   const [sortedItems, setSortedItems] = useState<sortedItem[]>([]);
 
-  const [totalFailing, setTotalFailing] = useState<number>();
+  const [passingPercentage, setpassingPercentage] = useState<number>();
 
 
   const [loading, setLoading] = useState(true);
@@ -21,12 +21,12 @@ export default function ShowResults() {
     const fetchData = async () => {
       try {
         if (letterboxdHandle) {
-          const { sortedItems, totalFailing } = await getResultData(letterboxdHandle);
+          const { sortedItems, passingPercentage } = await getResultData(letterboxdHandle);
           if (sortedItems) {
             setSortedItems(sortedItems);
           }
-          if (totalFailing) {
-            setTotalFailing(totalFailing);
+          if (passingPercentage) {
+            setpassingPercentage(passingPercentage);
           }
         }
       } catch (error) {
@@ -68,7 +68,7 @@ export default function ShowResults() {
           <h2 className="font-fraunces text-white text-2xl">Results for <span className='underline underline-offset-2'>{letterboxdHandle}</span></h2>
           <Graphs
             sortedItems={sortedItems}
-            totalFailing={totalFailing!}
+            passingPercentage={passingPercentage!}
           ></Graphs>
           <Lists
             sortedItems={sortedItems}
