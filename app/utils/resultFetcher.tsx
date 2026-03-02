@@ -59,7 +59,7 @@ export const getResultData = async (letterboxdHandle: string): Promise<{ sortedI
 
     const mergedItems: mergedItem[] = items.map(item => {
       let matchingBechdelItem = allMoviesArray.find(movie => {
-        return movie.year === item.year && (movie.title).toLowerCase() === (item.title).toLowerCase();
+        return movie.year === item.year && (movie.title).toLowerCase().replace(/\W/g, '') === (item.title).toLowerCase().replace(/\W/g, '');
       });
 
       return {
