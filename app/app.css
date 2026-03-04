@@ -43,6 +43,7 @@
   --color-dark-grey: #456;
   --color-poster-frame: #ddeeff40;
   --color-tooltip-text: #ddeeff;
+  --color-background: #14181c;
 }
 
 @layer base {

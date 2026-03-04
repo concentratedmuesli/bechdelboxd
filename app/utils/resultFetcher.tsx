@@ -1,8 +1,7 @@
-import type { sortedItem } from "../+types/sortedItems";
-import type { mergedItem } from "../+types/sortedItems";
-import { useEffect } from "react";
+import type { mergedItem } from '../interfaces/items';
+import type { sortedItem } from '../interfaces/items';
 
-export const getResultData = async (letterboxdHandle: string): Promise<{ sortedItems: any[], passingPercentage: number; }> => {
+export const getResultData = async (letterboxdHandle: string): Promise<{ sortedItems: any[], passingPercentage: number, overallBechdelStats: number[], bechdelPassingPercentage: number; }> => {
   try {
     const CORS_PROXY = 'https://corsproxy.io/?';
     const RSS_URL = `https://letterboxd.com/${letterboxdHandle}/rss/`;
@@ -100,7 +99,12 @@ export const getResultData = async (letterboxdHandle: string): Promise<{ sortedI
 
     let passingPercentage: number = Math.round((sortedItems[3].data.length) * 100 / (sortedItems[0].data.length + sortedItems[1].data.length + sortedItems[2].data.length + sortedItems[3].data.length));
 
-    return { sortedItems, passingPercentage };
+    let overallBechdelStats: number[] = [allMoviesArray.filter(item => item.rating === 3).length, allMoviesArray.filter(item => item.rating < 3).length];
+    
+    let bechdelPassingPercentage: number = Math.round(overallBechdelStats[0] * 100 / allMoviesArray.length);
+    console.log(bechdelPassingPercentage);
+
+    return { sortedItems, passingPercentage, overallBechdelStats, bechdelPassingPercentage };
 
   } catch (error) {
     console.error("Error parsing RSS feed:", error);

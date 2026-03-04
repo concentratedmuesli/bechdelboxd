@@ -1,12 +1,10 @@
-import type { sortedItem } from "./+types/sortedItems";
+import type { sortedItem } from "./interfaces/items";
 
 interface ListsComponentProps {
   sortedItems: sortedItem[];
 }
 
 export function Lists({ sortedItems }: ListsComponentProps) {
-
-  console.log(sortedItems[0].data.length, sortedItems[1].data.length, sortedItems[2].data.length, sortedItems[3].data.length, sortedItems[4].data.length);
 
   return (
     <div className="flex flex-col gap-12">
@@ -82,8 +80,8 @@ export function Lists({ sortedItems }: ListsComponentProps) {
             </div>
           ))}
         </div>
-        <p className="py-2">You know whether these movies pass the Bechdel test? Feel free to add them yourself to the 
-          <a href="https://bechdeltest.com/add/" rel="noopener noreferrer" className="text-bright-green underline underline-offset-3 hover:text-white active:text-bright-blue"> Bechdel Test Movie List</a>.</p>
+        <p className="py-2">You know whether these movies pass the Bechdel test? Feel free to <a href="https://bechdeltest.com/add/"
+        rel="noopener noreferrer" className="text-bright-green underline underline-offset-3 hover:text-white active:text-bright-blue">add them yourself</a> to the Bechdel Test Movie List.</p>
       </div>
 
     </div>
