@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Graphs } from './graphs';
 import { Lists } from './lists';
-import { getResultData } from './utils/resultFetcher';
-import type { sortedItem } from './interfaces/items';
+import { RandomList } from './randomList';
+import { GetResultData } from './utils/resultFetcher';
+import type { mergedBechdelItem, sortedItem } from './interfaces/items';
 import { useParams } from 'react-router';
+import { GetRandomPassingFilms } from './utils/passingFilmsSuggester';
 
 export default function ShowResults() {
   const { letterboxdHandle } = useParams<{ letterboxdHandle: string; }>();
@@ -12,6 +14,7 @@ export default function ShowResults() {
   const [passingPercentage, setpassingPercentage] = useState<number>();
   const [overallBechdelStats, setOverallBechdelStats] = useState<number[]>();
   const [bechdelPassingPercentage, setBechdelPassingPercentage] = useState<number>();
+  const [randomFilms, setRandomFilms] = useState<mergedBechdelItem[]>();
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -21,7 +24,7 @@ export default function ShowResults() {
     const fetchData = async () => {
       try {
         if (letterboxdHandle) {
-          const { sortedItems, passingPercentage, overallBechdelStats, bechdelPassingPercentage } = await getResultData(letterboxdHandle);
+          const { sortedItems, passingPercentage, overallBechdelStats, bechdelPassingPercentage } = await GetResultData(letterboxdHandle);
           if (sortedItems) {
             setSortedItems(sortedItems);
           }
@@ -44,6 +47,22 @@ export default function ShowResults() {
     };
 
     fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchRandomMovies = async () => {
+      try {
+        const randomFilms = await GetRandomPassingFilms();
+        if (randomFilms) {
+          setRandomFilms(randomFilms);
+        }
+        console.log(randomFilms)
+      } catch (error) {
+        console.error("Error getting random list:", error);
+      }
+    };
+
+    fetchRandomMovies()
   }, []);
 
   if (loading) return <div>Loading...</div>;
@@ -81,6 +100,9 @@ export default function ShowResults() {
           <Lists
             sortedItems={sortedItems}
           ></Lists>
+          <RandomList
+          randomFilms={randomFilms!}
+          ></RandomList>
           <p className='text-sm'>This project is not affiliated to but uses data from the <a href="https://bechdeltest.com/"
             rel="noopener noreferrer" className="text-bright-green underline underline-offset-3 hover:text-white active:text-bright-blue">Bechdel Test Movie List</a>.</p>
         </div>

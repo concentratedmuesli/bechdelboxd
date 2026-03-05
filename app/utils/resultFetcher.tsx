@@ -1,7 +1,8 @@
 import type { mergedItem } from '../interfaces/items';
 import type { sortedItem } from '../interfaces/items';
+import {unescape} from 'html-escaper';
 
-export const getResultData = async (letterboxdHandle: string): Promise<{ sortedItems: any[], passingPercentage: number, overallBechdelStats: number[], bechdelPassingPercentage: number; }> => {
+export const GetResultData = async (letterboxdHandle: string): Promise<{ sortedItems: any[], passingPercentage: number, overallBechdelStats: number[], bechdelPassingPercentage: number; }> => {
   try {
     const CORS_PROXY = 'https://corsproxy.io/?';
     const RSS_URL = `https://letterboxd.com/${letterboxdHandle}/rss/`;
@@ -58,7 +59,7 @@ export const getResultData = async (letterboxdHandle: string): Promise<{ sortedI
 
     const mergedItems: mergedItem[] = items.map(item => {
       let matchingBechdelItem = allMoviesArray.find(movie => {
-        return movie.year === item.year && (movie.title).toLowerCase().replace(/\W/g, '') === (item.title).toLowerCase().replace(/\W/g, '');
+        return movie.year === item.year && unescape(movie.title).toLowerCase().replace(/\W/g, '') === (item.title).toLowerCase().replace(/\W/g, '');
       });
 
       return {
@@ -102,7 +103,6 @@ export const getResultData = async (letterboxdHandle: string): Promise<{ sortedI
     let overallBechdelStats: number[] = [allMoviesArray.filter(item => item.rating === 3).length, allMoviesArray.filter(item => item.rating < 3).length];
     
     let bechdelPassingPercentage: number = Math.round(overallBechdelStats[0] * 100 / allMoviesArray.length);
-    console.log(bechdelPassingPercentage);
 
     return { sortedItems, passingPercentage, overallBechdelStats, bechdelPassingPercentage };
 
