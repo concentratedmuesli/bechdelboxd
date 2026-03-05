@@ -5,6 +5,10 @@ interface RandomListComponentProps {
 }
 
 export function RandomList({ randomFilms }: RandomListComponentProps) {
+  if (!randomFilms) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div>
       <h3 className="font-fraunces text-white text-2xl mb-4">
