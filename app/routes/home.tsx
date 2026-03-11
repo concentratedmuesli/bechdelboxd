@@ -1,10 +1,10 @@
 import type { Route } from "./+types/home";
-import { EnterUsername } from "../starting-page/starting-page";
+import { EnterUsername } from "../starting-page";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "New React Router App" },
-    { name: "description", content: "Welcome to React Router!" },
+    { title: "Bechdelboxd" },
+    { name: "description", content: "Find out how many of your watched movies pass the Bechdel test!" },
   ];
 }
 

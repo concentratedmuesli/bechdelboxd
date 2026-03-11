@@ -6,6 +6,7 @@ import { GetResultData } from './utils/resultFetcher';
 import type { mergedBechdelItem, sortedItem } from './interfaces/items';
 import { useParams } from 'react-router';
 import { GetRandomPassingFilms } from './utils/passingFilmsSuggester';
+import horizontalLogo from '/img/horizontal-logo.svg'
 
 export default function ShowResults() {
   const { letterboxdHandle } = useParams<{ letterboxdHandle: string; }>();
@@ -75,15 +76,22 @@ export default function ShowResults() {
         <header>
           <nav className='flex flex-row justify-between items-start gap-4'>
             <div className='flex flex-col flex-1'>
-              <h1 className="text-4xl font-pretendard font-bold text-white">Bechdelboxd</h1>
+              <img src={horizontalLogo} className='max-w-70'/>
+              {/* <h1 className="text-4xl font-pretendard font-bold text-white">Bechdelboxd</h1> */}
               <p className="">Of your 50 last watched movies, how many pass the bechdel test?</p>
             </div>
             <div className='flex flex-col flex-1'>
               <h2 className="font-fraunces text-white text-xl ">Rules:</h2>
               <ul>
-                <li>have at least two named women in it</li>
-                <li>who talk to each other</li>
-                <li>about something other than a man</li>
+                <li className="pl-6 bg-[url('/public/img/orange-bullet-point.svg')]
+                bg-no-repeat bg-position-[-24px_6px] bg-size-[1rem] bg-origin-content">
+                  have at least two named women in it</li>
+                <li className="pl-6 bg-[url('/public/img/green-bullet-point.svg')]
+                bg-no-repeat bg-position-[-24px_6px] bg-size-[1rem] bg-origin-content">
+                  who talk to each other</li>
+                <li className="pl-6 bg-[url('/public/img/blue-bullet-point.svg')]
+                bg-no-repeat bg-position-[-24px_6px] bg-size-[1rem] bg-origin-content">
+                  about something other than a man</li>
               </ul>
             </div>
           </nav>

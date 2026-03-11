@@ -1,5 +1,4 @@
-import logoDark from "./logo-dark.svg";
-import logoLight from "./logo-light.svg";
+import horizontalLogo from "/img/horizontal-logo.svg"
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 
@@ -24,7 +23,8 @@ export function EnterUsername() {
       <div className="flex-1 flex flex-col items-center gap-12 min-h-0">
         <header>
           <nav>
-            <h1 className="text-4xl font-pretendard font-bold text-white p-4">Bechdelboxd</h1>
+            {/* <h1 className="text-4xl font-pretendard font-bold text-white p-4">Bechdelboxd</h1> */}
+            <img src={horizontalLogo}/>
           </nav>
         </header>
         <div className="flex flex-col gap-8 mx-auto max-w-100">
@@ -34,9 +34,15 @@ export function EnterUsername() {
           <div className="">
             <h2 className="font-fraunces text-white text-2xl">Rules:</h2>
             <ul>
-              <li>have at least two named women in it</li>
-              <li>who talk to each other</li>
-              <li>about something other than a man</li>
+              <li className="pl-6 bg-[url('/public/img/orange-bullet-point.svg')]
+                bg-no-repeat bg-position-[-24px_6px] bg-size-[1rem] bg-origin-content">
+                  have at least two named women in it</li>
+              <li className="pl-6 bg-[url('/public/img/green-bullet-point.svg')]
+                bg-no-repeat bg-position-[-24px_6px] bg-size-[1rem] bg-origin-content">
+                  who talk to each other</li>
+              <li className="pl-6 bg-[url('/public/img/blue-bullet-point.svg')]
+                bg-no-repeat bg-position-[-24px_6px] bg-size-[1rem] bg-origin-content">
+                  about something other than a man</li>
             </ul>
           </div>
           <form className="flex flex-col items-start gap-2">
