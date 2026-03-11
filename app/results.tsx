@@ -7,8 +7,11 @@ import type { mergedBechdelItem, sortedItem } from './interfaces/items';
 import { useParams } from 'react-router';
 import { GetRandomPassingFilms } from './utils/passingFilmsSuggester';
 import horizontalLogo from '/img/horizontal-logo.svg'
+import { useNavigate } from "react-router-dom";
 
 export default function ShowResults() {
+  let navigate = useNavigate();
+
   const { letterboxdHandle } = useParams<{ letterboxdHandle: string; }>();
 
   const [sortedItems, setSortedItems] = useState<sortedItem[]>([]);
@@ -66,6 +69,10 @@ export default function ShowResults() {
     fetchRandomMovies()
   }, []);
 
+  const returnToHomePage = () => {
+    navigate('/');
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
@@ -77,7 +84,6 @@ export default function ShowResults() {
           <nav className='flex flex-row justify-between items-start gap-4'>
             <div className='flex flex-col flex-1'>
               <img src={horizontalLogo} className='max-w-70'/>
-              {/* <h1 className="text-4xl font-pretendard font-bold text-white">Bechdelboxd</h1> */}
               <p className="">Of your 50 last watched movies, how many pass the bechdel test?</p>
             </div>
             <div className='flex flex-col flex-1'>
@@ -98,7 +104,12 @@ export default function ShowResults() {
         </header>
 
         <div className="flex flex-col gap-4 mx-auto">
-          <h2 className="font-fraunces text-white text-2xl">Results for {letterboxdHandle}</h2>
+          <div className='flex flex-col justify-start gap-2 items-start'>
+          <h2 className="font-fraunces text-white text-3xl">Results for {letterboxdHandle}</h2>
+          <button className='text-sm text-tooltip-text bg-dark-grey hover:bg-bright-green hover:text-white
+          rounded-sm px-2 py-1 cursor-pointer' onClick={returnToHomePage}>
+            enter another user</button>
+          </div>
           <Graphs
             sortedItems={sortedItems}
             passingPercentage={passingPercentage!}
