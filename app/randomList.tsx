@@ -2,17 +2,24 @@ import type { mergedBechdelItem } from "./interfaces/items";
 
 interface RandomListComponentProps {
   randomFilms: mergedBechdelItem[];
+  onRefresh: () => void;
 }
 
-export function RandomList({ randomFilms }: RandomListComponentProps) {
+export function RandomList({ randomFilms, onRefresh }: RandomListComponentProps) {
   if (!randomFilms) {
     return <div>Loading...</div>;
   }
 
   return (
-    <div>
-      <h3 className="font-fraunces text-white text-2xl mb-4">
-        Suggestions of movies which do pass the Bechdel test</h3>
+    <div className='flex flex-col gap-4'>
+      <div className='flex flex-col justify-start gap-2 items-start'>
+        <h3 className="font-fraunces text-white text-2xl">
+          Suggestions of movies which do pass the Bechdel test</h3>
+        <button className='text-sm text-tooltip-text bg-dark-grey hover:bg-bright-green hover:text-white
+          rounded-sm px-2 py-1 cursor-pointer flex flex-row' onClick={onRefresh}>
+          <img src="/img/refresh-button.svg" />
+        </button>
+      </div>
       <div className="flex flex-row flex-wrap gap-2">
         {randomFilms.map((item, index) => (
           <div key={index} className="flex  group relative items-center">

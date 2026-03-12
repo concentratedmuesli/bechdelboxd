@@ -20,6 +20,8 @@ export default function ShowResults() {
   const [bechdelPassingPercentage, setBechdelPassingPercentage] = useState<number>();
   const [randomFilms, setRandomFilms] = useState<mergedBechdelItem[]>();
 
+  const [refresh, setRefresh] = useState(0);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -67,10 +69,14 @@ export default function ShowResults() {
     };
 
     fetchRandomMovies()
-  }, []);
+  }, [refresh]);
 
   const returnToHomePage = () => {
     navigate('/');
+  };
+
+  const handleRefresh = () => {
+    setRefresh(prev => prev + 1);
   };
 
   if (loading) return <div>Loading...</div>;
@@ -121,6 +127,7 @@ export default function ShowResults() {
           ></Lists>
           <RandomList
           randomFilms={randomFilms!}
+          onRefresh={handleRefresh}
           ></RandomList>
           <p className='text-sm'>This project is not affiliated to but uses data from the <a href="https://bechdeltest.com/"
             rel="noopener noreferrer" className="text-bright-green underline underline-offset-3 hover:text-white active:text-bright-blue">Bechdel Test Movie List</a>.</p>
