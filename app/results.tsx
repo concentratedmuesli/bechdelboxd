@@ -62,7 +62,6 @@ export default function ShowResults() {
         if (randomFilms) {
           setRandomFilms(randomFilms);
         }
-        console.log(randomFilms)
       } catch (error) {
         console.error("Error getting random list:", error);
       }

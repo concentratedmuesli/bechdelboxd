@@ -136,6 +136,27 @@ export function Graphs({ sortedItems, passingPercentage, overallBechdelStats, be
 
   }, [sortedItems, passingPercentage]);
 
+  const firstMessage = passingPercentage < 80 ?
+    `Only ${passingPercentage}% of your movies pass the test.` :
+    `Congrats, ${passingPercentage}% of your movies pass the test!`;
+
+  let secondMessage;
+  if (passingPercentage < bechdelPassingPercentage) {
+    secondMessage = `That's even less than the ${bechdelPassingPercentage}% of all movies recorded
+                in the Bechdel Test Movie List!`;
+  } else if (passingPercentage >= bechdelPassingPercentage && passingPercentage < 80) {
+    secondMessage = `Still better than the ${bechdelPassingPercentage}% of all movies recorded
+                in the Bechdel Test Movie List!`;
+  }
+  else if (passingPercentage >= 80) {
+    secondMessage = `To compare, only ${bechdelPassingPercentage}% of all movies recorded
+                in the Bechdel Test Movie List pass the test!`;
+  }
+
+  const thirdMessage = sortedItems[2].data.length < sortedItems[0].data.length + sortedItems[1].data.length  ?
+  `Most of your failed movies are not even close to passing the test.` :
+  `A good amount of your failed movies are close to passing the test.`
+
   if (!passFailData || !overallBechdelStats || !variousFailData || !missingBechdelData || !bechdelPassingPercentage) {
     return <div>Loading...</div>;
   }
@@ -146,13 +167,13 @@ export function Graphs({ sortedItems, passingPercentage, overallBechdelStats, be
         <div className="bg-background rounded-xl h-full w-full flex flex-row justify-center p-4 gap-4">
           <div className='flex-1 justify-center items-center'>
             <div className='flex-1 justify-center items-center'>
-            <Doughnut data={passFailData} className="max-w-100 max-h-100 self-center" />
+              <Doughnut data={passFailData} className="max-w-100 max-h-100 self-center" />
             </div>
-            <p className="text-center">Only {passingPercentage}% of your movies pass the test.</p>
+            <p className="text-center">{firstMessage}</p>
           </div>
           <div className='flex-1 justify-center items-center'>
             <Doughnut data={bechdelPassFailData} className="max-w-60 max-h-60" />
-            <p className="text-center">For comparison, {bechdelPassingPercentage}% of all movies recorded in the Bechdel Test Movie List pass the test.</p>
+              <p className="text-center">{secondMessage}</p>           
           </div>
         </div>
       </div>
@@ -161,13 +182,13 @@ export function Graphs({ sortedItems, passingPercentage, overallBechdelStats, be
         <div className="flex-1 rounded-xl bg-linear-to-bl from-bright-green via-bright-blue to-bright-orange p-px">
           <div className="bg-background rounded-xl h-full w-full flex flex-col justify-around p-4">
             <Doughnut data={variousFailData} className=' max-w-60 max-h-60' />
-            <p>Most of your failed movies are not even close to passing the test.</p>
+            <p>{thirdMessage}</p>
           </div>
         </div>
         <div className="flex-1 border rounded-xl bg-linear-to-tr from-bright-green via-bright-blue to-bright-orange p-px">
           <div className="bg-background rounded-xl h-full w-full flex flex-col justify-around p-4">
             <Doughnut data={missingBechdelData} className=' max-w-55 max-h-55' />
-            <p>Many movies you watched have not yet been recorded in the <a href="https://bechdeltest.com/add/" rel="noopener noreferrer"
+            <p>Some movies you watched have not yet been recorded in the <a href="https://bechdeltest.com/add/" rel="noopener noreferrer"
               className="text-bright-green underline underline-offset-3 hover:text-white active:text-bright-blue">Bechdel Test Movie List</a>.</p>
           </div>
         </div>

@@ -23,7 +23,6 @@ export function EnterUsername() {
       <div className="flex-1 flex flex-col items-center gap-12 min-h-0">
         <header>
           <nav>
-            {/* <h1 className="text-4xl font-pretendard font-bold text-white p-4">Bechdelboxd</h1> */}
             <img src={horizontalLogo}/>
           </nav>
         </header>
@@ -47,7 +46,7 @@ export function EnterUsername() {
           </div>
           <form className="flex flex-col items-start gap-2">
             <label className="font-fraunces text-white text-2xl">Enter your letterboxd username</label>
-            <input type="text" value={letterboxdHandle}
+            <input type="text" placeholder="username" value={letterboxdHandle}
               onChange={(e) => setLetterboxdHandle(e.target.value)}
               className="rounded-sm border border-gray-500 p-1 w-full text-center" />
             <button type="submit" onClick={submitUsername}

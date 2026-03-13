@@ -3,7 +3,7 @@ import type { mergedBechdelItem } from '~/interfaces/items';
 import {escape, unescape} from 'html-escaper';
 
 
-const fetchPosterUrl = async (item: bechdelItem, key:string): Promise<{imageUrl:string, title:string}> => {
+const fetchPosterAndTitle = async (item: bechdelItem, key:string): Promise<{imageUrl:string, title:string}> => {
   const response = await fetch(`https://www.omdbapi.com/?i=tt${item.imdbid}&apikey=${key}`);
   const data: omdbAPIResponse = await response.json();
   const imageUrl = data.Poster;
@@ -23,7 +23,7 @@ export const GetRandomPassingFilms = async (): Promise<mergedBechdelItem[]> => {
     }
     const mergedRandomList = await Promise.all(
       randomList.map(async (item: bechdelItem) => {
-        const {imageUrl, title} = await fetchPosterUrl(item, key);
+        const {imageUrl, title} = await fetchPosterAndTitle(item, key);
         // const correctedTitle = unescape(/,\s+The$/i.test(item.title) ? item.title.replace(/^(.+),\s+The$/i, 'The $1') : item.title);
         return {
           ...item,
@@ -32,7 +32,6 @@ export const GetRandomPassingFilms = async (): Promise<mergedBechdelItem[]> => {
           link: `https://www.imdb.com/title/tt${item.imdbid}`
         };
       }));
-      console.log(mergedRandomList)
     return mergedRandomList;
 
   } catch (error) {
