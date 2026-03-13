@@ -4,7 +4,7 @@ import {escape, unescape} from 'html-escaper';
 
 
 const fetchPosterAndTitle = async (item: bechdelItem, key:string): Promise<{imageUrl:string, title:string}> => {
-  const response = await fetch(`https://www.omdbapi.com/?i=tt${item.imdbid}&apikey=${key}`);
+  const response = await fetch(`https://www.omdbapi.com/?i=tt${item.imdbid}&h=600&apikey=${key}`);
   const data: omdbAPIResponse = await response.json();
   const imageUrl = data.Poster;
   const title = data.Title;
@@ -13,7 +13,7 @@ const fetchPosterAndTitle = async (item: bechdelItem, key:string): Promise<{imag
 
 export const GetRandomPassingFilms = async (): Promise<mergedBechdelItem[]> => {
   try {
-    const key = "7e62aed7";
+    const key = "1afcc41f";
     const randomList: bechdelItem[] = [];
     const allMovies = await import('../allMovies.json');
     const allMoviesArray = allMovies.default;
