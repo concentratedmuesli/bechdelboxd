@@ -8,6 +8,7 @@ import { useParams } from 'react-router';
 import { GetRandomPassingFilms } from './utils/passingFilmsSuggester';
 import horizontalLogo from '/img/horizontal-logo.svg'
 import { useNavigate } from "react-router-dom";
+import { Loading } from './loading';
 
 export default function ShowResults() {
   let navigate = useNavigate();
@@ -78,7 +79,7 @@ export default function ShowResults() {
     setRefresh(prev => prev + 1);
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <Loading></Loading>;
   if (error) return <div>Error: {error.message}</div>;
 
   return (

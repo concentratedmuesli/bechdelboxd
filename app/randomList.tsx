@@ -32,8 +32,8 @@ const ImageWithFallback = ({ src, fallbackSrc, alt }:ImageWithFallbackProps) => 
         <h3 className="font-fraunces text-white text-2xl">
           Suggestions of movies which do pass the Bechdel test</h3>
         <button className='text-sm text-tooltip-text bg-dark-grey hover:bg-bright-green hover:text-white
-          rounded-sm px-2 py-1 cursor-pointer flex flex-row' onClick={onRefresh}>
-          <img src="/img/refresh-button.svg" />
+          rounded-sm cursor-pointer flex flex-row' onClick={onRefresh}>
+          <img src="/img/refresh-button.svg" className="px-2 py-1 hover:rotate-45 transition ease-in-out duration-100 "/>
         </button>
       </div>
       <div className="flex flex-row flex-wrap gap-2">
