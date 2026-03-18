@@ -21,7 +21,9 @@ export function Lists({ sortedItems }: ListsComponentProps) {
                 <h4 className='uppercase text-sm'>{group.title}</h4>
               </div>
               <div className="flex flex-row flex-wrap gap-2">
-                {group.data.map((item, index) => (
+                {group.data.length < 1 ?
+          <div>There are no movies in this category.</div> :
+                group.data.map((item, index) => (
                   <div key={index} className="flex flex-col group relative items-center">
                     <a href={`${item.link}`} rel="noopener noreferrer">
                       <img
@@ -45,7 +47,9 @@ export function Lists({ sortedItems }: ListsComponentProps) {
         <h3 className="font-fraunces text-white text-2xl mb-4">
           Your movies that pass</h3>
         <div className="flex flex-row flex-wrap gap-2">
-          {sortedItems[3].data.map((item, index) => (
+          {sortedItems[3].data.length < 1 ?
+          <div>There are no movies in this category.</div> :
+          sortedItems[3].data.map((item, index) => (
             <div key={index} className="flex flex-col group relative items-center">
               <a href={`${item.link}`} rel="noopener noreferrer">
                 <img
@@ -66,7 +70,9 @@ export function Lists({ sortedItems }: ListsComponentProps) {
         <h3 className="font-fraunces text-white text-2xl mb-4">
           Your movies that do not have a Bechdel rating yet</h3>
         <div className="flex flex-row flex-wrap gap-2">
-          {sortedItems[4].data.map((item, index) => (
+          {sortedItems[4].data.length < 1 ?
+          <div>There are no movies in this category.</div> :
+          sortedItems[4].data.map((item, index) => (
             <div key={index} className="flex flex-col group relative items-center">
               <a href={`${item.link}`} rel="noopener noreferrer">
                 <img
