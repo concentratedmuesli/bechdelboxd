@@ -2,19 +2,51 @@ import type { mergedItem } from '../interfaces/items';
 import type { sortedItem } from '../interfaces/items';
 import { unescape } from 'html-escaper';
 
-export const GetResultData = async (letterboxdHandle: string): Promise<{
-  sortedItems: any[], passingPercentage: number,
-  overallBechdelStats: number[], bechdelPassingPercentage: number;
-}> => {
+interface GetResult {
+  success: boolean;
+  data?: {
+  sortedItems: any[], 
+  passingPercentage: number,
+  overallBechdelStats: number[], 
+  bechdelPassingPercentage: number; 
+};
+  error?: {
+    type: 'USER_NOT_FOUND' | 'SERVER_ERROR' | 'NETWORK_ERROR';
+    message: string;
+  };
+}
+
+export const GetResultData = async (letterboxdHandle: string): Promise<GetResult> => {
   try {
     const CORS_PROXY = 'https://corsproxy.io/?';
     const RSS_URL = `https://letterboxd.com/${letterboxdHandle}/rss/`;
 
+    const response = await fetch(CORS_PROXY + encodeURIComponent(RSS_URL));
+
+    if (response.status === 404) {
+      return {
+        success: false,
+        error: {
+          type: 'USER_NOT_FOUND',
+          message: 'This letterboxd username does not seem to exist.'
+        }
+      };
+    }
+
+    if (response.status >= 500) {
+      return {
+        success: false,
+        error: {
+          type: 'SERVER_ERROR',
+          message: 'Letterboxd is currently unavailable.'
+        }
+      };
+    }
+
+    const xmlText = await response.text();
+
     const allMovies = await import('../allMovies.json');
     const allMoviesArray = allMovies.default;
-
-    const response = await fetch(CORS_PROXY + encodeURIComponent(RSS_URL));
-    const xmlText = await response.text();
 
     const parser = new DOMParser();
     const xmlDoc = parser.parseFromString(xmlText, "text/xml");
@@ -108,10 +140,15 @@ export const GetResultData = async (letterboxdHandle: string): Promise<{
 
     let bechdelPassingPercentage: number = Math.round(overallBechdelStats[0] * 100 / allMoviesArray.length);
 
-    return { sortedItems, passingPercentage, overallBechdelStats, bechdelPassingPercentage };
+    return { success: true, data: {sortedItems, passingPercentage, overallBechdelStats, bechdelPassingPercentage}};
 
   } catch (error) {
-    console.error("Error parsing RSS feed:", error);
-    throw error;
+    return {
+      success: false,
+      error: {
+        type: 'NETWORK_ERROR',
+        message: 'We seem to be having a network error. Please try again later.'
+      }
+    };
   }
 };

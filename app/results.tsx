@@ -6,9 +6,14 @@ import { GetResultData } from './utils/resultFetcher';
 import type { mergedBechdelItem, sortedItem } from './interfaces/items';
 import { useParams } from 'react-router';
 import { GetRandomPassingFilms } from './utils/passingFilmsSuggester';
-import horizontalLogo from '/img/horizontal-logo.svg'
+import horizontalLogo from '/img/horizontal-logo.svg';
 import { useNavigate } from "react-router-dom";
 import { Loading } from './loading';
+
+type Error = {
+  type: 'USER_NOT_FOUND' | 'SERVER_ERROR' | 'NETWORK_ERROR';
+  message: string;
+} | null;
 
 export default function ShowResults() {
   let navigate = useNavigate();
@@ -24,25 +29,22 @@ export default function ShowResults() {
   const [refresh, setRefresh] = useState(0);
 
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
+  const [error, setError] = useState<Error>(null);
 
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         if (letterboxdHandle) {
-          const { sortedItems, passingPercentage, overallBechdelStats, bechdelPassingPercentage } = await GetResultData(letterboxdHandle);
-          if (sortedItems) {
-            setSortedItems(sortedItems);
-          }
-          if (passingPercentage) {
-            setpassingPercentage(passingPercentage);
-          }
-          if (overallBechdelStats) {
-            setOverallBechdelStats(overallBechdelStats);
-          }
-          if (bechdelPassingPercentage) {
-            setBechdelPassingPercentage(bechdelPassingPercentage);
+          const resultData = await GetResultData(letterboxdHandle);
+          if (resultData.success) {
+            setSortedItems(resultData.data!.sortedItems);
+            setpassingPercentage(resultData.data!.passingPercentage);
+            setOverallBechdelStats(resultData.data!.overallBechdelStats);
+            setBechdelPassingPercentage(resultData.data!.bechdelPassingPercentage);
+            setError(null);
+          } else if (resultData.error) {
+            setError(resultData.error);
           }
         }
       } catch (error) {
@@ -68,7 +70,7 @@ export default function ShowResults() {
       }
     };
 
-    fetchRandomMovies()
+    fetchRandomMovies();
   }, [refresh]);
 
   const returnToHomePage = () => {
@@ -80,7 +82,15 @@ export default function ShowResults() {
   };
 
   if (loading) return <Loading></Loading>;
-  if (error) return <div>Error: {error.message}</div>;
+
+  if (error) return (
+    <div className='flex flex-col gap-4 justify-center items-center h-screen'>
+      <h1 className="font-fraunces text-white text-3xl">Oops!</h1>
+      <p>{error.message}</p>
+      <button className='text-sm text-tooltip-text bg-dark-grey hover:bg-bright-green hover:text-white
+          rounded-sm px-2 py-1 cursor-pointer' onClick={returnToHomePage}>
+        try again</button>
+    </div>);
 
   return (
     <main className="flex items-center justify-center pt-8 pb-4 max-w-[50%] mx-auto">
@@ -89,7 +99,7 @@ export default function ShowResults() {
         <header>
           <nav className='flex flex-row justify-between items-start gap-4'>
             <div className='flex flex-col flex-1'>
-              <img src={horizontalLogo} className='max-w-70'/>
+              <img src={horizontalLogo} className='max-w-70' />
               <p className="">Of your 50 last watched movies, how many pass the bechdel test?</p>
             </div>
             <div className='flex flex-col flex-1'>
@@ -111,10 +121,10 @@ export default function ShowResults() {
 
         <div className="flex flex-col gap-4 mx-auto">
           <div className='flex flex-col justify-start gap-2 items-start'>
-          <h2 className="font-fraunces text-white text-3xl">Results for {letterboxdHandle}</h2>
-          <button className='text-sm text-tooltip-text bg-dark-grey hover:bg-bright-green hover:text-white
+            <h2 className="font-fraunces text-white text-3xl">Results for {letterboxdHandle}</h2>
+            <button className='text-sm text-tooltip-text bg-dark-grey hover:bg-bright-green hover:text-white
           rounded-sm px-2 py-1 cursor-pointer' onClick={returnToHomePage}>
-            enter another user</button>
+              enter another user</button>
           </div>
           <Graphs
             sortedItems={sortedItems}
@@ -126,8 +136,8 @@ export default function ShowResults() {
             sortedItems={sortedItems}
           ></Lists>
           <RandomList
-          randomFilms={randomFilms!}
-          onRefresh={handleRefresh}
+            randomFilms={randomFilms!}
+            onRefresh={handleRefresh}
           ></RandomList>
           <p className='text-sm'>This project is not affiliated to but uses data from the <a href="https://bechdeltest.com/"
             rel="noopener noreferrer" className="text-bright-green underline underline-offset-3 hover:text-white active:text-bright-blue">Bechdel Test Movie List</a>.</p>
