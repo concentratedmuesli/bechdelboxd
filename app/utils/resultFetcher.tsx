@@ -5,11 +5,11 @@ import { unescape } from 'html-escaper';
 interface GetResult {
   success: boolean;
   data?: {
-  sortedItems: any[], 
-  passingPercentage: number,
-  overallBechdelStats: number[], 
-  bechdelPassingPercentage: number; 
-};
+    sortedItems: any[],
+    passingPercentage: number,
+    overallBechdelStats: number[],
+    bechdelPassingPercentage: number;
+  };
   error?: {
     type: 'USER_NOT_FOUND' | 'SERVER_ERROR' | 'NETWORK_ERROR' | 'NO_LOGGED_FILMS';
     message: string;
@@ -92,9 +92,16 @@ export const GetResultData = async (letterboxdHandle: string): Promise<GetResult
 
     // the RSS feed shows (up to) the 50 latest watched movies,
     // and then movie lists made by other users that the user follows,
-    // which is not relevant for this app so I'm leaving them out
-    const filteredItems = items.filter(item => item.title !== undefined);
-    console.log(filteredItems)
+    // which is not relevant for this app so I'm leaving them out.
+    // I'm also removing duplicates, in case someone
+    // watched the same movie several times.
+    const filteredItems = items
+      .filter(item => item.title !== undefined)
+      .filter((item, index, self) =>
+        index === self.findIndex((otherItem) => otherItem.title === item.title && otherItem.year === item.year)
+      );
+
+    console.log(filteredItems);
     if (filteredItems.length === 0) {
       return {
         success: false,
@@ -153,7 +160,7 @@ export const GetResultData = async (letterboxdHandle: string): Promise<GetResult
 
     let bechdelPassingPercentage: number = Math.round(overallBechdelStats[0] * 100 / allMoviesArray.length);
 
-    return { success: true, data: {sortedItems, passingPercentage, overallBechdelStats, bechdelPassingPercentage}};
+    return { success: true, data: { sortedItems, passingPercentage, overallBechdelStats, bechdelPassingPercentage } };
 
   } catch (error) {
     return {
