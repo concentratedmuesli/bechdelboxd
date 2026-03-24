@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { Loading } from './loading';
 
 type Error = {
-  type: 'USER_NOT_FOUND' | 'SERVER_ERROR' | 'NETWORK_ERROR';
+  type: 'USER_NOT_FOUND' | 'SERVER_ERROR' | 'NETWORK_ERROR' | 'NO_LOGGED_FILMS';
   message: string;
 } | null;
 
@@ -30,7 +30,6 @@ export default function ShowResults() {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error>(null);
-
 
   useEffect(() => {
     const fetchData = async () => {

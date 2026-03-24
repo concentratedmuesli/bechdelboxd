@@ -11,7 +11,7 @@ interface GetResult {
   bechdelPassingPercentage: number; 
 };
   error?: {
-    type: 'USER_NOT_FOUND' | 'SERVER_ERROR' | 'NETWORK_ERROR';
+    type: 'USER_NOT_FOUND' | 'SERVER_ERROR' | 'NETWORK_ERROR' | 'NO_LOGGED_FILMS';
     message: string;
   };
 }
@@ -67,11 +67,7 @@ export const GetResultData = async (letterboxdHandle: string): Promise<GetResult
       }
     };
 
-    // the RSS feed shows the 50 latest watched movies,
-    // and then movie lists made by other users that the user follows,
-    // which is not relevant for this app so I'm leaving them out
-    let limit = itemElements.length > 50 ? 50 : itemElements.length;
-    for (let i = 0; i < limit; i++) {
+    for (let i = 0; i < itemElements.length; i++) {
       const item = itemElements[i];
       const description = item.getElementsByTagName('description')[0]?.textContent;
       const title = item.getElementsByTagName('letterboxd:filmTitle')[0]?.textContent;
@@ -92,8 +88,25 @@ export const GetResultData = async (letterboxdHandle: string): Promise<GetResult
         imageUrl: imageUrl
       });
     }
+    console.log(items);
 
-    const mergedItems: mergedItem[] = items.map(item => {
+    // the RSS feed shows (up to) the 50 latest watched movies,
+    // and then movie lists made by other users that the user follows,
+    // which is not relevant for this app so I'm leaving them out
+    const filteredItems = items.filter(item => item.title !== undefined);
+    console.log(filteredItems)
+    if (filteredItems.length === 0) {
+      return {
+        success: false,
+        error: {
+          type: 'NO_LOGGED_FILMS',
+          message: 'There are no logged films for this letterboxd user.'
+        }
+      };
+    }
+
+
+    const mergedItems: mergedItem[] = filteredItems.map(item => {
       let matchingBechdelItem = allMoviesArray.find(movie => {
         return movie.year === item.year && unescape(movie.title).toLowerCase().replace(/\W/g, '') === (item.title).toLowerCase().replace(/\W/g, '');
       });

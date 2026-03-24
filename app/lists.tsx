@@ -6,6 +6,7 @@ interface ListsComponentProps {
 
 export function Lists({ sortedItems }: ListsComponentProps) {
 
+
   return (
     <div className="flex flex-col gap-12">
 
