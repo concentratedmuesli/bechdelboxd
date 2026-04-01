@@ -15,13 +15,15 @@ export const GetRandomPassingFilms = async (): Promise<mergedBechdelItem[]> => {
   try {
     const key = "1afcc41f";
     const randomList: bechdelItem[] = [];
-    const allMovies = await import('../allMovies.json');
-    const allMoviesArray = allMovies.default;
-    const passingList = allMoviesArray.filter(item => item.rating === 3);
+    const allMoviesResponse = await fetch(`${import.meta.env.VITE_API_URL}`);
+
+    const allMovies:bechdelItem[]  = await allMoviesResponse.json();
+
+    const passingList = allMovies.filter(item => item.rating === 3);
     
     // Making sure there is no repetition in the suggestions
     const usedIndices = new Set();
-    const maxCount = Math.min(20, allMoviesArray.length);
+    const maxCount = Math.min(20, allMovies.length);
 
     while (randomList.length < maxCount) {
       const randomIndex = Math.floor(Math.random() * passingList.length);

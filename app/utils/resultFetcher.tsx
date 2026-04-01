@@ -1,3 +1,4 @@
+import type { bechdelItem } from '../interfaces/items';
 import type { mergedItem } from '../interfaces/items';
 import type { sortedItem } from '../interfaces/items';
 import { unescape } from 'html-escaper';
@@ -45,8 +46,8 @@ export const GetResultData = async (letterboxdHandle: string): Promise<GetResult
 
     const xmlText = await response.text();
 
-    const allMovies = await import('../allMovies.json');
-    const allMoviesArray = allMovies.default;
+    const allMoviesResponse = await fetch(`${import.meta.env.VITE_API_URL}`);
+    const allMovies: bechdelItem[] = await allMoviesResponse.json();
 
     const parser = new DOMParser();
     const xmlDoc = parser.parseFromString(xmlText, "text/xml");
@@ -88,7 +89,6 @@ export const GetResultData = async (letterboxdHandle: string): Promise<GetResult
         imageUrl: imageUrl
       });
     }
-    console.log(items);
 
     // the RSS feed shows (up to) the 50 latest watched movies,
     // and then movie lists made by other users that the user follows,
@@ -101,7 +101,6 @@ export const GetResultData = async (letterboxdHandle: string): Promise<GetResult
         index === self.findIndex((otherItem) => otherItem.title === item.title && otherItem.year === item.year)
       );
 
-    console.log(filteredItems);
     if (filteredItems.length === 0) {
       return {
         success: false,
@@ -114,7 +113,7 @@ export const GetResultData = async (letterboxdHandle: string): Promise<GetResult
 
 
     const mergedItems: mergedItem[] = filteredItems.map(item => {
-      let matchingBechdelItem = allMoviesArray.find(movie => {
+      let matchingBechdelItem = allMovies.find(movie => {
         return movie.year === item.year && unescape(movie.title).toLowerCase().replace(/\W/g, '') === (item.title).toLowerCase().replace(/\W/g, '');
       });
 
@@ -156,9 +155,9 @@ export const GetResultData = async (letterboxdHandle: string): Promise<GetResult
 
     let passingPercentage: number = Math.round((sortedItems[3].data.length) * 100 / (sortedItems[0].data.length + sortedItems[1].data.length + sortedItems[2].data.length + sortedItems[3].data.length));
 
-    let overallBechdelStats: number[] = [allMoviesArray.filter(item => item.rating === 3).length, allMoviesArray.filter(item => item.rating < 3).length];
+    let overallBechdelStats: number[] = [allMovies.filter(item => item.rating === 3).length, allMovies.filter(item => item.rating < 3).length];
 
-    let bechdelPassingPercentage: number = Math.round(overallBechdelStats[0] * 100 / allMoviesArray.length);
+    let bechdelPassingPercentage: number = Math.round(overallBechdelStats[0] * 100 / allMovies.length);
 
     return { success: true, data: { sortedItems, passingPercentage, overallBechdelStats, bechdelPassingPercentage } };
 
