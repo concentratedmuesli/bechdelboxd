@@ -45,10 +45,6 @@ export const GetResultData = async (letterboxdHandle: string): Promise<GetResult
     }
 
     const xmlText = await response.text();
-
-    const allMoviesResponse = await fetch(`${import.meta.env.VITE_API_URL}`);
-    const allMovies: bechdelItem[] = await allMoviesResponse.json();
-
     const parser = new DOMParser();
     const xmlDoc = parser.parseFromString(xmlText, "text/xml");
 
@@ -111,6 +107,8 @@ export const GetResultData = async (letterboxdHandle: string): Promise<GetResult
       };
     }
 
+    const allMoviesResponse = await fetch(`${import.meta.env.VITE_API_URL}`);
+    const allMovies: bechdelItem[] = await allMoviesResponse.json();
 
     const mergedItems: mergedItem[] = filteredItems.map(item => {
       let matchingBechdelItem = allMovies.find(movie => {
