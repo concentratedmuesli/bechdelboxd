@@ -19,11 +19,9 @@ interface GetResult {
 
 export const GetResultData = async (letterboxdHandle: string): Promise<GetResult> => {
   try {
-    const CORS_PROXY = 'https://corsproxy.io/?';
     const RSS_URL = `https://letterboxd.com/${letterboxdHandle}/rss/`;
 
-    const response = await fetch(CORS_PROXY + encodeURIComponent(RSS_URL));
-
+    const response = await fetch('http://localhost:3000/rss-proxy?url=' + RSS_URL);
     if (response.status === 404) {
       return {
         success: false,
@@ -33,16 +31,18 @@ export const GetResultData = async (letterboxdHandle: string): Promise<GetResult
         }
       };
     }
-
     if (response.status >= 500) {
       return {
         success: false,
         error: {
           type: 'SERVER_ERROR',
-          message: 'Letterboxd is currently unavailable.'
+          message: 'We seem to be having a server error.'
         }
       };
     }
+
+    //  const parsedResponse = response.json();
+    //  console.log(parsedResponse);
 
     const xmlText = await response.text();
     const parser = new DOMParser();
