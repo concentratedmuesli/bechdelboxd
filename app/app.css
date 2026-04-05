@@ -1,33 +1,33 @@
 @font-face {
-  font-display: swap; 
+  font-display: swap;
   font-family: 'Fraunces';
   font-style: bold;
   font-weight: 700;
-  src: url('./fonts/Fraunces9pt-Bold.woff2'); 
+  src: url('./fonts/Fraunces9pt-Bold.woff2');
 }
 
 @font-face {
-  font-display: swap; 
+  font-display: swap;
   font-family: 'Pretendard';
   font-style: regular;
   font-weight: 400;
-  src: url('./fonts/Pretendard-Regular.woff2'); 
+  src: url('./fonts/Pretendard-Regular.woff2');
 }
 
 @font-face {
-  font-display: swap; 
+  font-display: swap;
   font-family: 'Pretendard';
   font-style: bold;
   font-weight: 700;
-  src: url('./fonts/Pretendard-Bold.woff2'); 
+  src: url('./fonts/Pretendard-Bold.woff2');
 }
 
 @font-face {
-  font-display: swap; 
+  font-display: swap;
   font-family: 'Pretendard';
   font-style: light;
   font-weight: 300;
-  src: url('./fonts/Pretendard-Light.woff2'); 
+  src: url('./fonts/Pretendard-Light.woff2');
 }
 
 @import "tailwindcss";
@@ -48,11 +48,41 @@
 
 @layer base {
 
-  html,
-  body {
+  :root {
     background-color: #14181c;
     color: #9ab;
     font-family: var(--font-pretendard);
-    font-size: 1.1rem;
+    font-size: 0.95rem;
+  }
+
+  @media (min-width: 640px) {
+    :root {
+      --p-text-size: 1rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    :root {
+      --p-text-size: 1.1rem;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    :root {
+      --p-text-size: 1.2rem;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    :root {
+      --p-text-size: 1.35rem;
+    }
+  }
+
+  p,
+  li,
+  input {
+    font-size: var(--p-text-size);
+    line-height: 1.5;
   }
 }

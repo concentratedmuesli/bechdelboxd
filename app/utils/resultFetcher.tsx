@@ -102,7 +102,7 @@ export const GetResultData = async (letterboxdHandle: string): Promise<GetResult
         success: false,
         error: {
           type: 'NO_LOGGED_FILMS',
-          message: 'There are no logged films for this letterboxd user.'
+          message: "There are no logged films in this letterboxd user's diary."
         }
       };
     }
