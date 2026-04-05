@@ -10,13 +10,10 @@ export function EnterUsername() {
   function submitUsername(event: any) {
     event?.preventDefault();
 
-
-    if (letterboxdHandle && letterboxdHandle.trim()) {
-      navigate(`/results/${encodeURIComponent(letterboxdHandle)}`);
+    if (letterboxdHandle.trim()) {
+      navigate(`/results/${encodeURIComponent(letterboxdHandle.trim().toLowerCase())}`);
     }
   }
-
-
 
   return (
     <main className="flex items-center justify-center pt-12 sm:pt-16 lg:pb-4 w-[90%] sm:w-[70%] 2xl:w-[50%] 2xl:max-w-640 mx-auto">
