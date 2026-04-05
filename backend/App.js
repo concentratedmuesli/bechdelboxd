@@ -38,15 +38,18 @@ async function fetchRSSFeed(url) {
       const feed = await parser.parseString(data);
       // console.log(data);
       return { success: true, data };
+    } else if (response.status === 404) {
+      return { success: false, reason: 404 };
     }
   } catch (error) {
     console.log(`Direct fetch failed: ${error.message}`);
   }
 
+  let response;
   for (const proxy of proxies) {
     try {
       console.log(`Trying proxy: ${proxy}${url}`);
-      const response = await fetch(proxy + encodeURIComponent(url), {
+      response = await fetch(proxy + encodeURIComponent(url), {
         timeout: 10000,
       });
 
@@ -54,6 +57,8 @@ async function fetchRSSFeed(url) {
         const data = await response.text();
         const feed = await parser.parseString(data);
         return { success: true, data };
+      } else if (response.status === 404) {
+        return { success: false, reason: 404 };
       }
     } catch (error) {
       console.log(`Proxy failed (${proxy}): ${error.message}`);
@@ -61,7 +66,11 @@ async function fetchRSSFeed(url) {
     }
   }
 
-  return { success: false, error: 'All fetch attempts failed' };
+  return {
+    success: false,
+    error: 'All fetch attempts failed',
+    reason: response.status,
+  };
 }
 
 app.get('/rss-proxy', async (req, res) => {
@@ -74,8 +83,10 @@ app.get('/rss-proxy', async (req, res) => {
     if (response.success) {
       res.type('application/xml');
       res.send(response.data);
+    } else if (response.reason === 404) {
+      res.status(404).json({});
     } else {
-      res.status(500).json({ error: result.error });
+      res.status(500).json({ error: res.error });
     }
   } catch (error) {
     console.error('Server error:', error);
