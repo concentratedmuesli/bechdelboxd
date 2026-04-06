@@ -6,12 +6,27 @@ const cors = require('cors');
 const Parser = require('rss-parser');
 
 const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'postgres',
-  password: 'pass',
-  port: 5432,
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_DATABASE,
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT,
 });
+
+async function checkConnection() {
+  try {
+    const client = await pool.connect();
+    const result = await client.query('SELECT NOW()');
+    client.release();
+    console.log('Connection OK:', result.rows[0]);
+    return true;
+  } catch (err) {
+    console.error('Connection to database failed:', err.message);
+    process.exit(1);
+  }
+}
+
+checkConnection();
 
 app.use(cors());
 app.use(express.json());
