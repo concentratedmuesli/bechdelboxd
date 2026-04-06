@@ -21,7 +21,7 @@ export const GetResultData = async (letterboxdHandle: string): Promise<GetResult
   try {
     const RSS_URL = `https://letterboxd.com/${letterboxdHandle}/rss/`;
 
-    const response = await fetch('http://localhost:3000/rss-proxy?url=' + RSS_URL);
+    const response = await fetch(`${import.meta.env.VITE_API_URL_BASE}/rss-proxy?url=${RSS_URL}`);
     if (response.status === 404) {
       return {
         success: false,
@@ -107,7 +107,7 @@ export const GetResultData = async (letterboxdHandle: string): Promise<GetResult
       };
     }
 
-    const allMoviesResponse = await fetch(`${import.meta.env.VITE_API_URL}`);
+    const allMoviesResponse = await fetch(`${import.meta.env.VITE_API_URL_BASE}/api/results`);
     const allMovies: bechdelItem[] = await allMoviesResponse.json();
 
     const mergedItems: mergedItem[] = filteredItems.map(item => {

@@ -1,7 +1,5 @@
 import type { bechdelItem, omdbAPIResponse } from '~/interfaces/items';
 import type { mergedBechdelItem } from '~/interfaces/items';
-import { escape, unescape } from 'html-escaper';
-
 
 const fetchPosterAndTitle = async (item: bechdelItem, key: string): Promise<{ imageUrl: string, title: string; }> => {
   const response = await fetch(`https://www.omdbapi.com/?i=tt${item.imdbid}&h=600&apikey=${key}`);
@@ -15,12 +13,13 @@ export const GetRandomPassingFilms = async (): Promise<mergedBechdelItem[]> => {
   try {
     const key = "1afcc41f";
     const randomList: bechdelItem[] = [];
-    const allMoviesResponse = await fetch(`${import.meta.env.VITE_API_URL}`);
 
-    const allMovies:bechdelItem[]  = await allMoviesResponse.json();
+    const allMoviesResponse = await fetch(`${import.meta.env.VITE_API_URL_BASE}/api/results`);
+
+    const allMovies: bechdelItem[] = await allMoviesResponse.json();
 
     const passingList = allMovies.filter(item => item.rating === 3);
-    
+
     // Making sure there is no repetition in the suggestions
     const usedIndices = new Set();
     const maxCount = Math.min(20, allMovies.length);
