@@ -99,7 +99,7 @@ export default function ShowResults() {
           <nav className='flex flex-col sm:flex-row justify-between items-start gap-4 xl:gap-6 2xl:gap-8 w-full'>
             <div className='flex flex-col flex-1'>
               <img src={horizontalLogo} className='max-w-full sm:max-w-70' />
-              <p className="">Of your 50 last watched movies, how many pass the bechdel test?</p>
+              <p className="">Of your 50 last watched movies, how many pass the Bechdel test?</p>
             </div>
             <div className='flex flex-col flex-1'>
               <h2 className="font-fraunces text-white text-2xl ">Rules:</h2>

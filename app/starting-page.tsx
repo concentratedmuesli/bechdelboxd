@@ -27,7 +27,7 @@ export function EnterUsername() {
 
         <div className="flex flex-col gap-4 lg:gap-8 mx-auto max-w-100">
           <div className="">
-            <p className="font-fraunces text-white text-2xl 2xl:text-3xl">Of your 50 last watched movies, how many pass the bechdel test?</p>
+            <p className="font-fraunces text-white text-2xl 2xl:text-3xl">Of your 50 last watched movies, how many pass the Bechdel test?</p>
           </div>
           <div className="">
             <h2 className="font-fraunces text-white text-2xl 2xl:text-3xl">Rules:</h2>
