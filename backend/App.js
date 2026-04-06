@@ -1,5 +1,6 @@
 const express = require('express');
 const { Pool } = require('pg');
+const fs = require('fs');
 const app = express();
 const port = 3000;
 const cors = require('cors');
@@ -7,12 +8,22 @@ const Parser = require('rss-parser');
 
 console.log('Starting Bechdelboxd backend');
 
+let ssl = null;
+
+if (process.env.DB_HOST.includes('aiven')) {
+  ssl = {
+    rejectUnauthorized: true,
+    ca: fs.readFileSync('./aiven/ca.pem').toString(),
+  };
+}
+
 const pool = new Pool({
   user: process.env.DB_USER,
   host: process.env.DB_HOST,
   database: process.env.DB_DATABASE,
   password: process.env.DB_PASSWORD,
   port: process.env.DB_PORT,
+  ssl: ssl,
 });
 
 async function checkConnection() {
@@ -20,8 +31,7 @@ async function checkConnection() {
     const client = await pool.connect();
     const result = await client.query('SELECT NOW()');
     client.release();
-    console.log('Connection OK:', result.rows[0]);
-    return true;
+    console.log('Connected to', process.env.DB_HOST);
   } catch (err) {
     console.error('Connection to database failed:', err.message);
     process.exit(1);

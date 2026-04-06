@@ -1,3 +1,5 @@
 node_modules/
 allMovies.json
 .env
+.env.aiven
+aiven/ca.pem
