@@ -11,10 +11,21 @@ console.log('Starting Bechdelboxd backend');
 let ssl = null;
 
 if (process.env.DB_HOST.includes('aiven')) {
-  ssl = {
-    rejectUnauthorized: true,
-    ca: fs.readFileSync('./aiven/ca.pem').toString(),
-  };
+  try {
+    ssl = {
+      rejectUnauthorized: true,
+      ca: fs.readFileSync('./aiven/ca.pem').toString(),
+    };
+  } catch {
+    if (process.env.CA_PEM) {
+      ssl = {
+        rejectUnauthorized: true,
+        ca: process.env.CA_PEM,
+      };
+    } else {
+      console.log('Failed to load a certificate string for aiven.');
+    }
+  }
 }
 
 const pool = new Pool({
