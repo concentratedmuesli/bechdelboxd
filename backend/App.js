@@ -5,6 +5,8 @@ const port = 3000;
 const cors = require('cors');
 const Parser = require('rss-parser');
 
+console.log('Starting Bechdelboxd backend');
+
 const pool = new Pool({
   user: process.env.DB_USER,
   host: process.env.DB_HOST,
