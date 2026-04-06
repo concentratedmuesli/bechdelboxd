@@ -16,7 +16,7 @@ export function EnterUsername() {
   }
 
   return (
-    <main className="flex items-center justify-center pt-12 sm:pt-16 lg:pb-4 w-[90%] sm:w-[70%] 2xl:w-[50%] 2xl:max-w-640 mx-auto">
+    <main className="flex items-center justify-center pt-12 sm:pt-16 lg:pb-4  mx-auto">
       <div className="flex-1 flex flex-col items-center gap-4 lg:gap-12 min-h-0">
 
         <header>
@@ -59,47 +59,62 @@ export function EnterUsername() {
             </form>
 
             <div>
-              <p className='text-base xl:text-lg'>You don't have your own letterboxd account? Check out some popular reviewers' stats:</p>
+              <p className='text-base xl:text-lg'>You don't have your own letterboxd account? Check out some popular letterboxd users' stats:</p>
               <ul>
                 <li>
                   <button className='text-base xl:text-lg cursor-pointer
                  text-bright-green underline underline-offset-3
                  hover:text-white active:text-bright-blue'
-                    onClick={(e) => setLetterboxdHandle("girlactress")}>
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate(`/results/${encodeURIComponent('girlactress')}`);
+                    }}>
                     girlactress</button>
                 </li>
                 <li>
                   <button className='text-base xl:text-lg cursor-pointer
                  text-bright-green underline underline-offset-3
                  hover:text-white active:text-bright-blue'
-                    onClick={(e) => setLetterboxdHandle("stavvy")}>
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate(`/results/${encodeURIComponent('stavvy')}`);
+                    }}>
                     stavvy</button>
                 </li>
                 <li>
                   <button className='text-base xl:text-lg cursor-pointer
                  text-bright-green underline underline-offset-3
                  hover:text-white active:text-bright-blue'
-                    onClick={(e) => setLetterboxdHandle("itscharlibb")}>
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate(`/results/${encodeURIComponent('itscharlibb')}`);
+                    }}>
                     itscharlibb</button>
                 </li>
                 <li>
                   <button className='text-base xl:text-lg cursor-pointer
                  text-bright-green underline underline-offset-3
                  hover:text-white active:text-bright-blue'
-                    onClick={(e) => setLetterboxdHandle("scottmescudi84")}>
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate(`/results/${encodeURIComponent('scottmescudi84')}`);
+                    }}>
                     scottmescudi84</button>
                 </li>
                 <li>
                   <button className='text-base xl:text-lg cursor-pointer
                  text-bright-green underline underline-offset-3
                  hover:text-white active:text-bright-blue'
-                    onClick={(e) => setLetterboxdHandle("punkarcana")}>
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate(`/results/${encodeURIComponent('punkarcana')}`);
+                    }}>
                     punkarcana</button>
                 </li>
 
               </ul>
-              <p className='text-base xl:text-lg pt-2'>Or look for <a href="https://letterboxd.com/members/" rel="noopener noreferrer"
-                className="text-bright-green underline underline-offset-3 hover:text-white active:text-bright-blue">other reviewers</a>.
+              <p className='text-base xl:text-lg pt-2'>Or look for <a href="https://letterboxd.com/members/" target="_blank" rel="noopener noreferrer"
+                className="text-bright-green underline underline-offset-3 hover:text-white active:text-bright-blue">other users</a>.
                 You will find their username in their profile's URL.</p>
             </div>
           </div>
